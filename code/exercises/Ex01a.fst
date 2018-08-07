@@ -20,11 +20,9 @@ let canRead (f:filename) =
   f = "demo/README"
 
 
-val read : f:filename{canRead f} -> ML string
 let read f = FStar.IO.print_string ("Dummy read of file " ^ f ^ "\n"); f
 
 
-val write : f:filename{canWrite f} -> string -> ML unit
 let write f s = FStar.IO.print_string ("Dummy write of string " ^ s ^ " to file " ^ f ^ "\n")
 
 
@@ -33,7 +31,6 @@ let readme : filename = "demo/README"
 let tmp    : filename = "demo/tempfile"
 
 
-val staticChecking : unit -> ML unit
 let staticChecking () =
   let v1 = read tmp in
   let v2 = read readme in
@@ -43,7 +40,6 @@ let staticChecking () =
 
 
 exception InvalidRead
-val checkedRead : filename -> ML string
 let checkedRead f =
   if canRead f
     then read f
@@ -52,7 +48,6 @@ let checkedRead f =
 
 (* Exercise 1a *)
 exception InvalidWrite
-val checkedWrite : filename -> string -> ML unit
 let checkedWrite f s =
   if canWrite f
     then write f s
