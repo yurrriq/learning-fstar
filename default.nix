@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
       ]))
     kremlin
     ocaml
+    z3
   ] ++ (with ocamlPackages; [
     batteries
     findlib
