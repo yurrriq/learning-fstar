@@ -65,10 +65,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [
+    iosevka
     fstar
     ((emacsPackagesNgGen emacs).emacsWithPackages (epkgs:
       with epkgs.melpaPackages; [
+        fill-column-indicator
         fstar-mode
+        hl-todo
+        whitespace-cleanup-mode
       ]))
     kremlin
     ocaml
