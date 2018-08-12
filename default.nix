@@ -35,6 +35,12 @@ with import nixpkgs {
 };
 
 let
+  customEmacs = emacsPackagesNg.emacsWithPackages (epkgs: with epkgs.melpaPackages; [
+    fill-column-indicator
+    fstar-mode
+    hl-todo
+    whitespace-cleanup-mode
+  ]);
   visitors = callPackage ./nix/pkgs/development/ocaml-modules/visitors {
     inherit (ocamlPackages)
       cppo findlib ocamlbuild ppx_deriving ppx_tools;
@@ -65,13 +71,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [
-    ((emacsPackagesNgGen emacs).emacsWithPackages (epkgs:
-      with epkgs.melpaPackages; [
-        fill-column-indicator
-        fstar-mode
-        hl-todo
-        whitespace-cleanup-mode
-      ]))
+    customEmacs
     fstar
     iosevka
     kremlin
