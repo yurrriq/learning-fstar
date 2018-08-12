@@ -1,3 +1,11 @@
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+
+(require 'package)
+
+(setq package-archives nil)
+(setq package-enable-at-startup nil)
+
 (package-initialize)
 
 
