@@ -65,8 +65,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
   buildInputs = [
-    iosevka
-    fstar
     ((emacsPackagesNgGen emacs).emacsWithPackages (epkgs:
       with epkgs.melpaPackages; [
         fill-column-indicator
@@ -74,6 +72,8 @@ stdenv.mkDerivation rec {
         hl-todo
         whitespace-cleanup-mode
       ]))
+    fstar
+    iosevka
     kremlin
     ocaml
     z3
