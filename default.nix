@@ -64,18 +64,25 @@ stdenv.mkDerivation rec {
     addToSearchPath OCAMLPATH "${fstar}/lib/ocaml/${ocaml.version}/site-lib/"
   '';
 
+  makeFlags = [ "PREFIX=$(out)" ];
+
   preBuild = ''
     install -dm755 $out/lib
+    install -dm755 $out/share
     # install -dm755 $out/bin
   '';
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  postBuild = ''
+    make -f Makefile.sphinx html
+  '';
+
   buildInputs = [
     customEmacs
     fstar
     iosevka
     kremlin
     ocaml
+    python2
     z3
   ] ++ (with ocamlPackages; [
     batteries
@@ -84,9 +91,16 @@ stdenv.mkDerivation rec {
     ppx_deriving_yojson
     stdint
     zarith
+  ]) ++ (with python2Packages; [
+    docutils
+    sphinx
   ]);
 
   installPhase = ''
-    printf "we did it!"
+    cp -r _build/html $out/share/
+  '';
+
+  shellHook = ''
+    export PATH="$PATH:${emacsPackagesNg.melpaPackages.fstar-mode}/share/emacs/site-lisp/elpa/fstar-mode-${emacsPackagesNg.melpaPackages.fstar-mode.version}/etc/fslit"
   '';
 }
