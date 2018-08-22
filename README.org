@@ -1,0 +1,4 @@
+* Learning F*
+/Working through the [[https://www.fstar-lang.org/tutorial/][F* Tutorial]]/
+
+[[https://travis-ci.org/yurrriq/learning-fstar][file:https://travis-ci.org/yurrriq/learning-fstar.svg?branch=master]]
