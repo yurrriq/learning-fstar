@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# -- Path setup --------------------------------------------------------------
-
-import os
-import sys
-# FIXME:
-sys.path.insert(0, '/nix/store/zllljw33kbilnzxscrsh7kcz04nfiwnm-emacs-fstar-mode-20180324.2211/share/emacs/site-lisp/elpa/fstar-mode-20180324.2211/etc')
-
-
 # -- Project information -----------------------------------------------------
 
 project   = u'Learning F*'

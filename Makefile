@@ -16,4 +16,13 @@ ${BIN_DIR}/%: ${LIB_DIR}/%.ml
 
 
 .PHONY: all
+
 all: ${MLFILES} # $(addprefix ${BIN_DIR}/, $(notdir ${MLFILES:.ml=}))
+
+
+.PHONY: docs
+
+docs:
+	@ rm -fR $@/*
+	@ cp -fR --no-preserve=ownership,mode $$(nix-build --no-out-link)/share/html/* $@/
+	@ touch $@/.nojekyll

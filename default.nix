@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     addToSearchPath OCAMLPATH "${fstar}/lib/ocaml/${ocaml.version}/site-lib/"
+    addToSearchPath PYTHONPATH "${emacsPackagesNg.melpaPackages.fstar-mode}/share/emacs/site-lisp/elpa/fstar-mode-${emacsPackagesNg.melpaPackages.fstar-mode.version}/etc"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
