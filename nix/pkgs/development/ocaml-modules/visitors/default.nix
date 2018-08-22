@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "20180306";
 
   src = fetchgit {
-    url = "https://gitlab.inria.fr/fpottier/visitors.gitgit://gitlab.inria.fr/fpottier/visitors.git";
+    url = "https://gitlab.inria.fr/fpottier/visitors.git";
     rev = version;
     sha256 = "1ym79yjz67fvwx6qlz70v7d74b6hy7mxrbwbgrp986c6n96qs3x9";
   };
