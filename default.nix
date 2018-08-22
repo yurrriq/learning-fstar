@@ -1,57 +1,26 @@
 let
-  fetchNixpkgs =
-    { owner ? "NixOS", repo ? "nixpkgs", rev, sha256 }:
+
+  fetchTarballFromGitHub =
+    { owner, repo, rev, sha256, ... }:
     builtins.fetchTarball {
       url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
       inherit sha256;
     };
 
-  importJSON = path: builtins.fromJSON (builtins.readFile path);
+  fromJSONFile = f: builtins.fromJSON (builtins.readFile f);
+
 in
 
-{ nixpkgs ? fetchNixpkgs (importJSON ./nixpkgs-src.json) }:
+{ nixpkgs ? fetchTarballFromGitHub (fromJSONFile ./nix/srcs/nixpkgs.json) }:
 
 with import nixpkgs {
-  config = {
-    packageOverrides = super: rec {
-      fstar = (super.fstar.overrideDerivation (old: {
-        postPatch = ''
-          substituteInPlace ulib/Makefile \
-              --replace 'OCAMLPATH=../../../bin/' 'OCAMLPATH+=:../../../bin/'
-            '';
-        preInstall = ''
-          mkdir -p $out/lib/ocaml/${super.ocaml.version}/site-lib/fstarlib
-          make -C src fstarlib
-          make -C ulib/ml
-        '';
-        installFlags = "-C src/ocaml-output ulib";
-      })).override {
-        ocamlPackages = super.ocaml-ng.ocamlPackages_4_05;
-      };
-      ocamlPackages = super.ocaml-ng.ocamlPackages_4_05;
-      inherit (ocamlPackages) ocaml;
-    };
-  };
-};
 
-let
-  customEmacs = emacsPackagesNg.emacsWithPackages (epkgs: with epkgs.melpaPackages; [
-    fill-column-indicator
-    fstar-mode
-    hl-todo
-    whitespace-cleanup-mode
-  ]);
-  visitors = callPackage ./nix/pkgs/development/ocaml-modules/visitors {
-    inherit (ocamlPackages)
-      cppo findlib ocamlbuild ppx_deriving ppx_tools;
-  };
-  kremlin = callPackage ./nix/pkgs/development/fstar-modules/kremlin {
-    inherit fstar ocaml visitors which;
-    inherit (ocamlPackages)
-      batteries findlib fix menhir ocamlbuild pprint ppx_deriving ppx_deriving_yojson
-      process stdint ulex wasm zarith;
-  };
-in
+  overlays = [
+    (import ./nix/overlays/ocaml)
+    (import ./nix/overlays/fstar)
+    (import ./nix/overlays/emacs)
+  ];
+};
 
 stdenv.mkDerivation rec {
   name = "learning-fstar-${version}";
@@ -77,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    customEmacs
+    emacs
     fstar
     iosevka
     kremlin
